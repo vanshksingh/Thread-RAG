@@ -59,7 +59,7 @@ def start_chat():
     config = {
         "configurable": {
             "thread_id": thread_id,
-            "user_id": "1" # This mimics your context logic
+            "user_id": "1" # This mimics context logic
         }
     }
 

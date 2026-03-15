@@ -13,7 +13,7 @@ CACHE_NAME = "catalog.json"
 
 
 MAIN_MODEL = "gpt-oss:20b"
-TEMPERATURE = 0
+TEMPERATURE = 1   #set to 1 to avoid getting stuck in tool call loops
 
 os.makedirs(CACHE_PATH, exist_ok=True)
 
