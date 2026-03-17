@@ -1,14 +1,15 @@
+#rag_ret.py
 import hashlib
 import json
 import os
 from typing import List, Optional
 from pypdf import PdfReader
-
+#langchain specific imports
 from langchain_ollama import OllamaEmbeddings, OllamaLLM
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_core.tools import tool
-
+#pull from config
 from config import EMBEDDER_MODEL, SUMMARY_MODEL, DB_PATH, DB_NAME , CACHE_PATH , CACHE_NAME
 
 # Initialize directories
@@ -167,6 +168,7 @@ def fetch_chunks_by_id(chunk_ids: List[str]):
 
 
 # --- PRE-HEAT ---
+#made into a tool call as it was more straight forward
 @tool
 def pre_heat_summaries(serial_id: Optional[str] = None):
     """Generates all missing summaries for a doc (or all docs) and caches them."""

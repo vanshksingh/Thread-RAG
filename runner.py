@@ -1,3 +1,4 @@
+#runner.py
 import uuid
 from dataclasses import dataclass
 from langchain_ollama import ChatOllama
@@ -5,7 +6,9 @@ from langchain_core.messages import HumanMessage
 from langgraph.checkpoint.memory import InMemorySaver
 from langchain.agents import create_agent
 # External
+#pull from rag implementation
 from rag_ret import list_available_documents, rag_search, fetch_chunks_by_id, index_new_document, pre_heat_summaries
+#pull from config
 from config  import MAIN_MODEL, TEMPERATURE
 
 
