@@ -1,6 +1,6 @@
 # config.py
 import os
-
+from runner import start_chat
 
 
 # Using qwen2.5:0.5b for extraction/logic and tinyllama for fast summarization
@@ -18,3 +18,5 @@ TEMPERATURE = 1   #set to 1 to avoid getting stuck in tool call loops
 os.makedirs(CACHE_PATH, exist_ok=True)
 
 
+if __name__ == "__main__":
+    start_chat()
