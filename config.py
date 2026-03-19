@@ -1,8 +1,6 @@
 # config.py
 import os
 
-
-
 # Using qwen2.5:0.5b for extraction/logic and tinyllama for fast summarization
 EMBEDDER_MODEL = "nomic-embed-text"
 SUMMARY_MODEL = "qwen2.5:0.5b"
