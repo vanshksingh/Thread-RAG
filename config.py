@@ -21,5 +21,5 @@ if __name__ == "__main__":
     # Local import prevents circular dependency error
     from runner import start_chat
 
-    print(f"🚀 Launching RAG Session [Model: {MAIN_MODEL}]")
+    print(f"Launching RAG Session [Model: {MAIN_MODEL}]")
     start_chat()
