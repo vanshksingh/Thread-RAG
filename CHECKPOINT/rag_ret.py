@@ -1,15 +1,16 @@
+#rag_ret.py
 import hashlib
 import json
 import os
 from typing import List, Optional
 from pypdf import PdfReader
-
+#langchain specific imports
 from langchain_ollama import OllamaEmbeddings, OllamaLLM
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_core.tools import tool
-
-from config import EMBEDDER_MODEL, SUMMARY_MODEL, DB_PATH, CACHE_PATH
+#pull from config
+from config import EMBEDDER_MODEL, SUMMARY_MODEL, DB_PATH, DB_NAME , CACHE_PATH , CACHE_NAME
 
 # Initialize directories
 os.makedirs(CACHE_PATH, exist_ok=True)
@@ -19,8 +20,8 @@ embeddings = OllamaEmbeddings(model=EMBEDDER_MODEL)
 summarizer_llm = OllamaLLM(model=SUMMARY_MODEL)
 vector_store = Chroma(persist_directory=DB_PATH, embedding_function=embeddings)
 
-SUMMARY_CACHE_PATH = os.path.join(CACHE_PATH, "chunk_summaries.json")
-CATALOG_PATH = os.path.join(CACHE_PATH, "catalog.json")
+SUMMARY_CACHE_PATH = os.path.join(CACHE_PATH, DB_NAME)
+CATALOG_PATH = os.path.join(CACHE_PATH, CACHE_NAME)
 
 
 def load_json_cache(path: str) -> dict:
@@ -167,7 +168,8 @@ def fetch_chunks_by_id(chunk_ids: List[str]):
 
 
 # --- PRE-HEAT ---
-
+#made into a tool call as it was more straight forward
+@tool
 def pre_heat_summaries(serial_id: Optional[str] = None):
     """Generates all missing summaries for a doc (or all docs) and caches them."""
     print(f"🔥 Pre-heating {serial_id if serial_id else 'All'}...")
@@ -177,4 +179,4 @@ def pre_heat_summaries(serial_id: Optional[str] = None):
     for i in range(total):
         get_summary_on_demand(all_chunks['ids'][i], all_chunks['documents'][i])
         if i % 10 == 0: print(f"Progress: {i}/{total}")
-    print("✅ Complete.")
+    print("Pre-Heating Completed.")

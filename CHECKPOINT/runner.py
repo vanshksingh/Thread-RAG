@@ -1,3 +1,4 @@
+#runner.py
 import uuid
 from dataclasses import dataclass
 from langchain_ollama import ChatOllama
@@ -5,7 +6,9 @@ from langchain_core.messages import HumanMessage
 from langgraph.checkpoint.memory import InMemorySaver
 from langchain.agents import create_agent
 # External
-from rag_ret import list_available_documents, rag_search, fetch_chunks_by_id, index_new_document
+#pull from rag implementation
+from rag_ret import list_available_documents, rag_search, fetch_chunks_by_id, index_new_document, pre_heat_summaries
+#pull from config
 from config  import MAIN_MODEL, TEMPERATURE
 
 
@@ -42,7 +45,7 @@ SYSTEM_PROMPT = (
 
 # 5. Set up Memory and Agent
 memory = InMemorySaver()
-tools = [ list_available_documents, rag_search, fetch_chunks_by_id, index_new_document ]
+tools = [ list_available_documents, rag_search, fetch_chunks_by_id, index_new_document, pre_heat_summaries ]
 
 
 
@@ -59,17 +62,17 @@ def start_chat():
     config = {
         "configurable": {
             "thread_id": thread_id,
-            "user_id": "1" # This mimics your context logic
+            "user_id": "1" # This mimics context logic
         }
     }
 
-    print("--- 🌦️ Weather Pun-dit 3000 Online ---")
+    print("--- 🌦️ Thread-RAG Online ---")
     print("(Type 'exit' to quit)\n")
 
     while True:
         user_input = input("You: ")
         if user_input.lower() in ["exit", "quit", "q"]:
-            print("Pun-dit: See ya on the 'sunny side'!")
+            print("Assistant: Thank you for using this tool. Goodbye!")
             break
 
         # Invoke the agent
@@ -81,7 +84,7 @@ def start_chat():
 
         # The last message in the list is the AI's final response
         final_response = result["messages"][-1].content
-        print(f"\nPun-dit: {final_response}\n")
+        print(f"\nAssistant: {final_response}\n")
 
 if __name__ == "__main__":
     start_chat()

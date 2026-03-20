@@ -179,4 +179,4 @@ def pre_heat_summaries(serial_id: Optional[str] = None):
     for i in range(total):
         get_summary_on_demand(all_chunks['ids'][i], all_chunks['documents'][i])
         if i % 10 == 0: print(f"Progress: {i}/{total}")
-    print("✅ Complete.")
+    print("Pre-Heating Completed.")
