@@ -4,11 +4,10 @@ import json
 import os
 from typing import List, Optional
 from pypdf import PdfReader
-from docx import Document
 #langchain specific imports
 from langchain_ollama import OllamaEmbeddings, OllamaLLM
 from langchain_chroma import Chroma
-from langchain_core.documents import Document as LangDocument
+from langchain_core.documents import Document
 from langchain_core.tools import tool
 #pull from config
 from config import EMBEDDER_MODEL, SUMMARY_MODEL, DB_PATH, DB_NAME , CACHE_PATH , CACHE_NAME
@@ -114,10 +113,6 @@ def index_new_document(file_path: str):
     if ext == ".pdf":
         for page in PdfReader(file_path).pages:
             text += (page.extract_text() or "") + "\n"
-    elif ext == ".docx":
-        doc = Document(file_path)
-        for para in doc.paragraphs:
-            text += para.text + "\n"
     else:
         with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
             text = f.read()
@@ -126,7 +121,7 @@ def index_new_document(file_path: str):
     docs_to_add = []
     for i, content in enumerate(raw_chunks):
         c_id = f"{serial_id}_{str(i).zfill(3)}"
-        docs_to_add.append(LangDocument(
+        docs_to_add.append(Document(
             page_content=content,
             metadata={"doc_id": serial_id, "id": c_id, "doc_name": os.path.basename(file_path)}
         ))
@@ -170,19 +165,6 @@ def fetch_chunks_by_id(chunk_ids: List[str]):
         full_context = assemble_chunk_with_context(c_id, content)
         final_output.append({"id": c_id, "text": full_context})
     return final_output
-
-
-@tool
-def compare_sections(query: str, doc_ids: List[str]):
-    """
-    Search and compare relevant sections across multiple specified documents.
-    Returns results organized by document for side-by-side comparison.
-    """
-    results = {}
-    for doc_id in doc_ids:
-        doc_results = rag_search(query, doc_id)
-        results[doc_id] = doc_results
-    return results
 
 
 # --- PRE-HEAT ---

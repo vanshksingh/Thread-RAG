@@ -4,10 +4,10 @@ from dataclasses import dataclass
 from langchain_ollama import ChatOllama
 from langchain_core.messages import HumanMessage
 from langgraph.checkpoint.memory import InMemorySaver
-from langgraph.prebuilt import create_react_agent
+from langchain.agents import create_agent
 # External
 #pull from rag implementation
-from rag_ret import list_available_documents, rag_search, fetch_chunks_by_id, index_new_document, pre_heat_summaries, compare_sections
+from rag_ret import list_available_documents, rag_search, fetch_chunks_by_id, index_new_document, pre_heat_summaries
 #pull from config
 from config  import MAIN_MODEL, TEMPERATURE
 
@@ -45,12 +45,12 @@ SYSTEM_PROMPT = (
 
 # 5. Set up Memory and Agent
 memory = InMemorySaver()
-tools = [ list_available_documents, rag_search, fetch_chunks_by_id, index_new_document, pre_heat_summaries, compare_sections ]
+tools = [ list_available_documents, rag_search, fetch_chunks_by_id, index_new_document, pre_heat_summaries ]
 
 
 
 # create_agent is the standard LangGraph way to create a tool-calling loop
-agent_executor = create_react_agent(
+agent_executor = create_agent(
     model,
     tools,
     checkpointer=memory
