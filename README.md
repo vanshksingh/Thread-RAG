@@ -406,4 +406,3 @@ Document --> ChunkThread["Chunk Thread"] --> SemanticEntry["Semantic Entry"] -->
 
 Across 960 trials (four retrieval strategies, four model sizes, two embedding models), THREAD-RAG achieves a mean F1 improvement of 7.44% over standard RAG. On complex procedural queries, the Answer Correctness Rate (F1 >= 0.70) improves from 58.3% to 70.8%, a 21.4% relative gain. The wrong answer rate (F1 < 0.60) falls from 19.6% to 11.2%. The 20B model reaches 100% correctness on complex queries under THREAD-RAG. Token consumption drops by 12.4% per query on average, rising to ~50% in batch mode with pre-heating.
 
-Full results and per-model breakdowns are in the paper included in this repository.
