@@ -10,8 +10,6 @@
 
 THREAD-RAG is a retrieval architecture for long-document and procedural reasoning. Instead of treating documents as bags of isolated chunks, it models them as ordered semantic threads. You jump to a relevant section using vector search, then walk through the document sequentially to reconstruct the context and reasoning path around it.
 
-A ready-to-run evaluation harness lives in the `FREEZE/` folder. Point it at your corpus and it benchmarks all retrieval strategies across your chosen models automatically.
-
 ```mermaid
 flowchart LR
 Query[User Query] --> Jump[Semantic Jump]
@@ -21,6 +19,132 @@ Walk1 --> Walk2[Sequential Walk]
 Walk2 --> Context[Context Window]
 Context --> Answer[Final Answer]
 ```
+
+---
+
+# Getting Started
+
+## Prerequisites
+
+- Python 3.8+
+- [Ollama](https://ollama.ai/) installed and running
+- Required Ollama models pulled locally
+
+## Installation
+
+1. **Clone or download this repository:**
+   ```bash
+   cd /path/to/Thread-RAG
+   ```
+
+2. **Install Python dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Ensure Ollama is running and has required models:**
+   ```bash
+   # Pull the embedder model
+   ollama pull nomic-embed-text
+   
+   # Pull the summary model
+   ollama pull qwen2.5:0.5b
+   
+   # Pull the main reasoning model
+   ollama pull gpt-oss:20b
+   ```
+   
+   > Note: You can change these models in `config.py` if you prefer different ones.
+
+4. **Start Ollama server** (if not already running):
+   ```bash
+   ollama serve
+   ```
+
+## Configuration
+
+Edit `config.py` to customize:
+
+- **`EMBEDDER_MODEL`**: Model used for document embeddings (default: `nomic-embed-text`)
+- **`SUMMARY_MODEL`**: Lightweight model for generating chunk summaries (default: `qwen2.5:0.5b`)
+- **`MAIN_MODEL`**: Primary reasoning model (default: `gpt-oss:20b`)
+- **`TEMPERATURE`**: Model sampling temperature (default: `1` to avoid tool-call loops)
+- **`DB_PATH`**: Directory for vector database (default: `./local_rag_db`)
+- **`CACHE_PATH`**: Directory for summary cache (default: `./doc_cache`)
+
+## Usage
+
+### Start the Interactive Chat Session
+
+```bash
+python runner.py
+```
+
+You'll see:
+```
+--- 🌦️ Thread-RAG Online ---
+(Type 'exit' to quit)
+
+You: 
+```
+
+### Example Query Flow
+
+```
+You: Index a document
+Assistant: [Lists available documents]
+
+You: Search for a topic
+Assistant: [Performs semantic jump and sequential traversal]
+
+You: exit
+Assistant: Thank you for using this tool. Goodbye!
+```
+
+### Available Commands
+
+Once running, the agent has access to these tools:
+
+- **`list_available_documents`** – See all indexed documents
+- **`index_new_document(file_path)`** – Ingest a PDF, TXT, or DOCX file
+- **`rag_search(query, doc_id?)`** – Search across documents with optional filtering
+- **`fetch_chunks_by_id(chunk_ids)`** – Retrieve specific chunks with context windows
+- **`pre_heat_summaries(serial_id?)`** – Pre-generate all summaries for faster querying
+
+## Project Structure
+
+```
+Thread-RAG/
+├── config.py              # Configuration (models, paths, parameters)
+├── runner.py              # Main chat interface and agent loop
+├── rag_ret.py            # RAG retrieval engine and tools
+├── requirements.txt       # Python dependencies
+├── README.md             # This file
+├── FREEZE/               # Ready-to-run evaluation harness
+├── Evaluation/           # Evaluation framework and reports
+├── CHECKPOINT/           # Checkpoint snapshots
+└── ARCHIVE/              # Legacy implementations
+```
+
+## Troubleshooting
+
+**Problem:** `ModuleNotFoundError: No module named 'langchain'`
+- **Solution:** Run `pip install -r requirements.txt`
+
+**Problem:** Connection refused to Ollama
+- **Solution:** Ensure Ollama is running: `ollama serve` in another terminal
+
+**Problem:** Model not found (e.g., `nomic-embed-text`)
+- **Solution:** Pull the model: `ollama pull nomic-embed-text`
+
+**Problem:** Out of memory errors
+- **Solution:** Use smaller models in `config.py` or increase available RAM/VRAM
+
+## Next Steps
+
+- Read [The Problem with Standard RAG](#the-problem-with-standard-rag) to understand the architecture
+- Try indexing a document: `index_new_document("/path/to/your/file.pdf")`
+- Run the evaluation suite in `FREEZE/` to benchmark against your corpus
 
 ---
 
@@ -405,4 +529,18 @@ Document --> ChunkThread["Chunk Thread"] --> SemanticEntry["Semantic Entry"] -->
 # Evaluation Results
 
 Across 960 trials (four retrieval strategies, four model sizes, two embedding models), THREAD-RAG achieves a mean F1 improvement of 7.44% over standard RAG. On complex procedural queries, the Answer Correctness Rate (F1 >= 0.70) improves from 58.3% to 70.8%, a 21.4% relative gain. The wrong answer rate (F1 < 0.60) falls from 19.6% to 11.2%. The 20B model reaches 100% correctness on complex queries under THREAD-RAG. Token consumption drops by 12.4% per query on average, rising to ~50% in batch mode with pre-heating.
+
+---
+
+# License
+
+This project is released under the MIT License. See LICENSE file for full details.
+
+---
+
+# Attribution
+
+**Written by [@vanshksingh](https://github.com/vanshksingh)**
+
+THREAD-RAG is an open-source project designed to advance retrieval-augmented generation for long-document reasoning and procedural understanding.
 
