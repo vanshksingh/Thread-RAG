@@ -10,6 +10,8 @@
 
 THREAD-RAG is a retrieval architecture for long-document and procedural reasoning. Instead of treating documents as bags of isolated chunks, it models them as ordered semantic threads. You jump to a relevant section using vector search, then walk through the document sequentially to reconstruct the context and reasoning path around it.
 
+<img width="1062" height="821" alt="Screenshot 2026-03-23 at 10 11 15 PM" src="https://github.com/user-attachments/assets/ba11c65d-ebc2-4bce-a9d9-b4c1b09d7303" />
+
 ```mermaid
 flowchart LR
 Query[User Query] --> Jump[Semantic Jump]
