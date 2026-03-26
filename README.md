@@ -28,7 +28,7 @@ Context --> Answer[Final Answer]
 
 ## Prerequisites
 
-- Python 3.8+
+- Python 3.10+
 - [Ollama](https://ollama.ai/) installed and running
 - Required Ollama models pulled locally
 
