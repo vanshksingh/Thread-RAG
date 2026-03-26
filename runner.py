@@ -11,7 +11,7 @@ from rag_ret import list_available_documents, rag_search, fetch_chunks_by_id, in
 #pull from config
 from config  import MAIN_MODEL, TEMPERATURE
 
-
+#Entry Point for the RAG system. This sets up the agent, tools, and context management for a local RAG assistant.
 
 # 1. Define Context Schema
 @dataclass

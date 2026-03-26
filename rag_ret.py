@@ -12,6 +12,8 @@ from langchain_core.tools import tool
 #pull from config
 from config import EMBEDDER_MODEL, SUMMARY_MODEL, DB_PATH, DB_NAME , CACHE_PATH , CACHE_NAME
 
+#Thread-RAG Main tools and Context Management for Local RAG System
+
 # Initialize directories
 os.makedirs(CACHE_PATH, exist_ok=True)
 

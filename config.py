@@ -1,6 +1,7 @@
 # config.py
 import os
 
+#Configurator and runner for the local RAG system. This is where you can set your models, paths, and other parameters.
 
 # Using qwen2.5:0.5b for extraction/logic and tinyllama for fast summarization
 EMBEDDER_MODEL = "nomic-embed-text"
